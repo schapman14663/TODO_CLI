@@ -29,7 +29,7 @@ def main():
         help="indicate current state of the TODO item",
     )
     add_parser.add_argument(
-        "-d", "--due-date", help="set date the TODO list item is due"
+        "-d", "--due-date", default="N/A", help="set date the TODO list item is due"
     )
 
     # View Task Command
@@ -38,7 +38,6 @@ def main():
         "-s",
         "--sort",
         nargs="*",
-        default="due_date",
         help="select sort mode for TODO list",
     )
 
