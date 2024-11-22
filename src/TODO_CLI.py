@@ -1,5 +1,6 @@
 import argparse
 import json
+from datetime import datetime
 
 TODO_FILE = "TODO.json"
 
@@ -27,9 +28,19 @@ def main():
         choices=["not started", "in progress", "done"],
         help="indicate current state of the TODO item",
     )
+    add_parser.add_argument(
+        "-d", "--due-date", help="set date the TODO list item is due"
+    )
 
     # View Task Command
     view_parser = sub_parsers.add_parser("view", help="View the TODO list")
+    view_parser.add_argument(
+        "-s",
+        "--sort",
+        nargs="*",
+        default="due_date",
+        help="select sort mode for TODO list",
+    )
 
     # Edit Task Commands
     edit_parser = sub_parsers.add_parser("edit", help="edit task in TODO list")
@@ -57,7 +68,7 @@ def main():
     if args.command == "add":
         add_task(args)
     if args.command == "view":
-        view_tasks()
+        view_tasks(args)
     if args.command == "edit":
         edit_task(args)
     if args.command == "delete":
@@ -71,12 +82,14 @@ def add_task(args):
     task_id = len(tasks) + 1
     priority = args.priority
     completion = args.completion
+    due_date = args.due_date
 
     new_task = {
         "id": task_id,
         "task": task,
         "priority": priority,
         "completion": completion,
+        "due_date": due_date,
     }
 
     tasks.append(new_task)
@@ -117,12 +130,17 @@ def read_tasks():
     return tasks
 
 
-def view_tasks():
-    tasks = read_tasks()
-    print("| task id | task | priority | completion status |")
+def view_tasks(args):
+
+    if args.sort:
+        tasks = sort_tasks(args)
+    else:
+        tasks = read_tasks()
+
+    print("| task id | priority | completion status | due date | task")
     for task in tasks:
         print(
-            f"| {task['id']} | {task['task']} | {task['priority']} | {task['completion']}"
+            f"| {task['id']} | {task['priority']} | {task['completion']} | {task['due_date']} | {task['task']} "
         )
 
 
@@ -154,6 +172,17 @@ def update_task_completion(args):
             print(f"task priority changed to {new_completion}")
             return
     print(f"task {task_id} not found")
+
+
+def sort_tasks(args):
+    tasks = read_tasks()
+    sort_case = args.sort
+
+    print(sort_case)
+
+    for i in range(0, len(sort_case))[::-1]:
+        tasks.sort(key=lambda task: (task[sort_case[i]]))
+    return tasks
 
 
 if __name__ == "__main__":
