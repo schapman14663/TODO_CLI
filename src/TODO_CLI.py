@@ -43,6 +43,12 @@ def main():
     view_parser.add_argument(
         "-f", "--filter", nargs="*", help="select filters for TODO list"
     )
+    view_parser.add_argument(
+        "-z",
+        "--fuzzy",
+        nargs="*",
+        help="filter TODO list with any valid match, use to search for example priority low and high",
+    )
 
     # Edit Task Commands
     edit_parser = sub_parsers.add_parser("edit", help="edit task in TODO list")
@@ -138,6 +144,8 @@ def view_tasks(args):
         tasks = sort_tasks(args)
     if args.filter:
         tasks = filter_tasks(args)
+    if args.fuzzy:
+        tasks = fuzzy_filter(args)
     else:
         tasks = read_tasks()
 
@@ -200,16 +208,17 @@ def filter_tasks(args):
             filtered_list.append(task)
     return filtered_list
 
-    # for task in tasks:
-    # for value in filter_case:
-    # if all(filt er_case in task.values():
-    #   print(filter_case)
-    #  print(task.values())
-    # print("true")
-    # filtered_list.append(task)
 
+def fuzzy_filter(args):
+    tasks = read_tasks()
+    filter_case = args.fuzzy
+    filtered_list = []
 
-# return filtered_list
+    for task in tasks:
+        for case in filter_case:
+            if case in task.values():
+                filtered_list.append(task)
+    return filtered_list
 
 
 if __name__ == "__main__":
