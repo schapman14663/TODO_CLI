@@ -40,6 +40,9 @@ def main():
         nargs="*",
         help="select sort mode for TODO list",
     )
+    view_parser.add_argument(
+        "-f", "--filter", nargs="*", help="select filters for TODO list"
+    )
 
     # Edit Task Commands
     edit_parser = sub_parsers.add_parser("edit", help="edit task in TODO list")
@@ -133,6 +136,8 @@ def view_tasks(args):
 
     if args.sort:
         tasks = sort_tasks(args)
+    if args.filter:
+        tasks = filter_tasks(args)
     else:
         tasks = read_tasks()
 
@@ -182,6 +187,29 @@ def sort_tasks(args):
     for i in range(0, len(sort_case))[::-1]:
         tasks.sort(key=lambda task: (task[sort_case[i]]))
     return tasks
+
+
+def filter_tasks(args):
+    tasks = read_tasks()
+    filter_case = args.filter
+    filtered_list = []
+
+    for task in tasks:
+        if all(item in task.values() for item in filter_case):
+            print("True")
+            filtered_list.append(task)
+    return filtered_list
+
+    # for task in tasks:
+    # for value in filter_case:
+    # if all(filt er_case in task.values():
+    #   print(filter_case)
+    #  print(task.values())
+    # print("true")
+    # filtered_list.append(task)
+
+
+# return filtered_list
 
 
 if __name__ == "__main__":

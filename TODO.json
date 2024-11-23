@@ -1,1 +1,1 @@
-[{"id": 1, "task": "task 1", "priority": "medium", "completion": "not started", "due_date": "N/A"}]
+[{"id": 1, "task": "task 1", "priority": "medium", "completion": "not started", "due_date": "N/A"}, {"id": 2, "task": "test", "priority": "low", "completion": "in progress", "due_date": "N/A"}, {"id": 3, "task": "test", "priority": "low", "completion": "done", "due_date": "N/A"}, {"id": 4, "task": "test", "priority": "high", "completion": "done", "due_date": "N/A"}]
